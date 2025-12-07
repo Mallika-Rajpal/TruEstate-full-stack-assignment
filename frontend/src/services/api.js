@@ -2,8 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5050/api", // change to deployed URL later
+  baseURL: "https://truestate-full-stack-assignment.onrender.com/api", // 🔥 deployed backend
 });
 
 export default api;
-
