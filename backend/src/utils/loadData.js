@@ -1,38 +1,38 @@
-const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 const csv = require("csv-parser");
-const { Readable } = require("stream");
+const { normalizeRow } = require("./normalizeRow");
 
-let salesData = [];
+let SALES = [];
 
-const CSV_URL =
-  "https://github.com/Mallika-Rajpal/TruEstate-full-stack-assignment/releases/download/v1/sales.csv";
-
-async function loadCSV() {
-  console.log("📥 CSV Source:", CSV_URL);
-
-  const response = await axios({
-    url: CSV_URL,
-    method: "GET",
-    responseType: "stream",
-  });
-
-  console.log("⬇️ Streaming CSV from:", CSV_URL);
-
+/**
+ * Loads the CSV dataset into memory and normalizes each row.
+ * Adjust header names in normalizeRow.js if your CSV differs.
+ */
+function loadCSV() {
   return new Promise((resolve, reject) => {
-    response.data
+    const filePath = "/Users/mallika/truestate-data/sales.csv";
+
+    const temp = [];
+
+    fs.createReadStream(filePath)
       .pipe(csv())
-      .on("data", (row) => {
-        salesData.push(row); // pushes ONE row at a time — memory safe
+      .on("data", (rawRow) => {
+        const row = normalizeRow(rawRow);
+        temp.push(row);
       })
       .on("end", () => {
-        console.log(`✅ Loaded ${salesData.length} rows successfully`);
-        resolve();
+        SALES = temp;
+        console.log(`📊 Loaded ${SALES.length} sales records`);
+        resolve(SALES);
       })
       .on("error", (err) => {
-        console.error("❌ CSV Streaming Error:", err);
         reject(err);
       });
   });
 }
 
-module.exports = { salesData, loadCSV };
+module.exports = {
+  loadCSV,
+  getSalesData: () => SALES
+};
