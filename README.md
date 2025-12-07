@@ -1,6 +1,6 @@
 # Retail Sales Management — Assignment Submission
 
-## 1. Overview (3–5 lines)
+## 1. Overview 
 This project provides a Retail Sales Management dashboard where users can search, filter, sort and paginate through sales transactions.  
 It features multi-select filters, range-based filtering, real-time search, server-side data normalization, and an optimized React UI.  
 The goal is to support fast exploration of customer, product, store and payment-related sales records.
@@ -56,4 +56,4 @@ cd frontend
 npm install
 npm run dev
 ```
-#### Access the application at the URL printed by the frontend ( https://tru-estate-full-stack-assignment.vercel.app/ )
+#### Access the application at the URL ( https://tru-estate-full-stack-assignment.vercel.app/ )
