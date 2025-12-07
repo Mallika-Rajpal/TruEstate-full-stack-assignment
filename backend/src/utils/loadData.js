@@ -1,40 +1,38 @@
 const axios = require("axios");
 const csv = require("csv-parser");
-const { normalizeRow } = require("./normalizeRow");
+const { Readable } = require("stream");
 
 let salesData = [];
 
-const CSV_URL = process.env.CSV_URL; 
-// example: https://github.com/Mallika-Rajpal/TruEstate-full-stack-assignment/releases/download/v1/sales.csv
+const CSV_URL =
+  "https://github.com/Mallika-Rajpal/TruEstate-full-stack-assignment/releases/download/v1/sales.csv";
 
 async function loadCSV() {
-  if (!CSV_URL) throw new Error("CSV_URL environment variable is missing");
-
-  console.log("⬇️ Downloading sales.csv from:", CSV_URL);
+  console.log("📥 CSV Source:", CSV_URL);
 
   const response = await axios({
-    method: "get",
     url: CSV_URL,
+    method: "GET",
     responseType: "stream",
   });
+
+  console.log("⬇️ Streaming CSV from:", CSV_URL);
 
   return new Promise((resolve, reject) => {
     response.data
       .pipe(csv())
-      .on("data", (row) => salesData.push(normalizeRow(row)))
+      .on("data", (row) => {
+        salesData.push(row); // pushes ONE row at a time — memory safe
+      })
       .on("end", () => {
-        console.log(`✅ Loaded ${salesData.length} records`);
+        console.log(`✅ Loaded ${salesData.length} rows successfully`);
         resolve();
       })
       .on("error", (err) => {
-        console.error("❌ CSV parsing failed:", err);
+        console.error("❌ CSV Streaming Error:", err);
         reject(err);
       });
   });
 }
 
-function getSalesData() {
-  return salesData;
-}
-
-module.exports = { loadCSV, getSalesData };
+module.exports = { salesData, loadCSV };
