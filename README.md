@@ -56,4 +56,6 @@ cd frontend
 npm install
 npm run dev
 ```
-#### Access the application at the URL ( https://tru-estate-full-stack-assignment.vercel.app/ )
+#### Access the application here: https://tru-estate-full-stack-assignment.vercel.app/
+
+Note: The backend initializes on first load, so the app may take up to ~50 seconds to become fully responsive.
